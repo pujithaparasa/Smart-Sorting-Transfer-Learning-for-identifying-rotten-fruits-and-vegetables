@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .fullscreen-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-image: url("/static/bg3.jpg");
+        background-size: cover;
+        background-position: center;
+        z-index: -1;
+    }
+
+    .overlay {
+        position: absolute;
+        top: 0; left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        z-index: 0;
+    }
+
+    .hero-content {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+        color: white;
+        z-index: 2;
+        position: relative;
+        padding: 0 20px;
+    }
+
+    .hero-content h1 {
+        font-size: 3rem;
+        font-weight: bold;
+    }
+
+    .hero-content p {
+        font-size: 1.25rem;
+        margin: 20px 0;
+    }
+
+    .btn-custom {
+        background-color: red;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        font-weight: bold;
+        font-size: 1rem;
+        border-radius: 5px;
+    }
+</style>
+
+<!-- Background and Overlay -->
+<div class="fullscreen-bg"></div>
+<div class="overlay"></div>
+
+<!-- Hero Content -->
+<div class="hero-content">
+    <h5>Welcome to <strong>NutriGaze</strong></h5>
+    <h1>GREENGUARD INSIGHTS</h1>
+    <p>We are a team of innovative scientists and technologists dedicated to ensuring your produce is always fresh and healthy.</p>
+    <a href="/predict" class="btn btn-custom">GET STARTED</a>
+</div>
+{% endblock %}
