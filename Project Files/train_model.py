@@ -4,6 +4,9 @@ import os
 import json
 import numpy as np
 import tensorflow as tf
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+import matplotlib.pyplot as plt
+import seaborn as sns
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.applications import MobileNetV2
 from tensorflow.keras.layers import Dense, GlobalAveragePooling2D, Dropout
@@ -40,7 +43,8 @@ val_gen = datagen.flow_from_directory(
     target_size=(IMG_SIZE, IMG_SIZE),
     batch_size=BATCH_SIZE,
     subset="validation",
-    class_mode="categorical"
+    class_mode="categorical",
+    shuffle=False  # Required for correct evaluation
 )
 
 # Save label mapping
@@ -65,5 +69,34 @@ model.fit(train_gen, validation_data=val_gen, epochs=EPOCHS)
 
 # Save model
 model.save(MODEL_PATH)
-
 print("✅ Model trained and saved as model.h5")
+
+# ====================
+# ✅ Evaluation Section
+# ====================
+
+# Predict on validation set
+Y_pred = model.predict(val_gen)
+y_pred = np.argmax(Y_pred, axis=1)
+y_true = val_gen.classes
+labels = list(val_gen.class_indices.keys())
+
+# Accuracy Score
+acc = accuracy_score(y_true, y_pred)
+print("\n✅ Accuracy Score:", acc)
+
+# Classification Report
+report = classification_report(y_true, y_pred, target_names=labels)
+print("\n✅ Classification Report:\n", report)
+
+# Confusion Matrix
+cm = confusion_matrix(y_true, y_pred)
+plt.figure(figsize=(14, 10))
+sns.heatmap(cm, annot=False, cmap="Blues", xticklabels=labels, yticklabels=labels)
+plt.title("Confusion Matrix")
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
+plt.xticks(rotation=90)
+plt.tight_layout()
+plt.savefig("confusion_matrix.png")
+plt.show()
